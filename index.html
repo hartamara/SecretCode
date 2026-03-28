@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SecretCode — Caesar cipher</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsza,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <main class="shell">
+      <header class="hero">
+        <p class="eyebrow">Browser-only · Caesar cipher</p>
+        <h1>SecretCode</h1>
+        <p class="lede">
+          Shift letters in the Latin alphabet by a numeric key. Encrypt or decrypt in the browser;
+          nothing is sent to a server.
+        </p>
+      </header>
+
+      <section class="panel" aria-labelledby="tool-heading">
+        <h2 id="tool-heading" class="visually-hidden">Encrypt or decrypt</h2>
+
+        <div class="tabs" role="tablist" aria-label="Mode">
+          <button type="button" class="tab is-active" role="tab" id="tab-encrypt" aria-selected="true" data-mode="encrypt">
+            Encrypt
+          </button>
+          <button type="button" class="tab" role="tab" id="tab-decrypt" aria-selected="false" data-mode="decrypt">
+            Decrypt
+          </button>
+        </div>
+
+        <label class="field">
+          <span class="label">Key</span>
+          <input
+            type="text"
+            id="key"
+            class="input"
+            inputmode="numeric"
+            autocomplete="off"
+            placeholder="Whole number greater than 1, e.g. 3"
+            aria-describedby="key-hint"
+          />
+          <span id="key-hint" class="hint">Digits only; integer &gt; 1 (the shift wraps every 26 letters).</span>
+        </label>
+
+        <label class="field">
+          <span class="label" id="text-label">Text to encrypt</span>
+          <textarea
+            id="text"
+            class="textarea"
+            rows="6"
+            maxlength="200"
+            spellcheck="true"
+            placeholder="English letters and spaces only, up to 200 characters..."
+          ></textarea>
+          <span class="hint char-count" id="char-count" aria-live="polite">0 / 200</span>
+        </label>
+
+        <div class="actions">
+          <button type="button" class="btn btn-primary" id="run">Encrypt</button>
+          <button type="button" class="btn btn-ghost" id="copy" disabled>Copy the text</button>
+        </div>
+
+        <div class="field output-wrap">
+          <span class="label">Result</span>
+          <pre class="output" id="output" tabindex="0" aria-live="polite"></pre>
+        </div>
+
+        <p class="status" id="status" role="status"></p>
+      </section>
+
+      <footer class="fine-print">
+        <p>
+          <strong>Encrypt:</strong> plain text in → Caesar ciphertext in <strong>Result</strong>; actions:
+          Encrypt, Copy the text. <strong>Decrypt:</strong> ciphertext in → plain text in Result; same key and
+          alphabet; actions: Decrypt, Copy the result.
+        </p>
+      </footer>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
