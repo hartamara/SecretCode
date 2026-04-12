@@ -36,26 +36,11 @@ function parseKey(raw) {
   return n;
 }
 
-/**
- * @param {string} c
- * @param {number} shift 0–25 effective shift
- * @param {boolean} decrypt
- */
-function shiftLetter(c, shift, decrypt) {
-  const code = c.charCodeAt(0);
-  if (code >= 65 && code <= 90) {
-    const base = 65;
-    const x = code - base;
-    const s = ((decrypt ? -shift : shift) % 26 + 26) % 26;
-    return String.fromCharCode(base + ((x + s) % 26));
-  }
-  if (code >= 97 && code <= 122) {
-    const base = 97;
-    const x = code - base;
-    const s = ((decrypt ? -shift : shift) % 26 + 26) % 26;
-    return String.fromCharCode(base + ((x + s) % 26));
-  }
-  return c;
+const LOWER_SPACE = "abcdefghijklmnopqrstuvwxyz ";
+const UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+function mod(n, m) {
+  return ((n % m) + m) % m;
 }
 
 /**
@@ -64,11 +49,24 @@ function shiftLetter(c, shift, decrypt) {
  * @param {boolean} decrypt
  */
 function caesar(input, key, decrypt) {
-  const shift = key % 26;
   let out = "";
   for (let i = 0; i < input.length; i++) {
     const ch = input[i];
-    out += ch === " " ? " " : shiftLetter(ch, shift, decrypt);
+    const shiftFactor = key + i;
+    
+    if (LOWER_SPACE.includes(ch)) {
+      const idx = LOWER_SPACE.indexOf(ch);
+      // Encrypt: shift forward. Decrypt: shift backward
+      const newIdx = mod(idx + (decrypt ? -shiftFactor : shiftFactor), LOWER_SPACE.length);
+      out += LOWER_SPACE[newIdx];
+    } else if (UPPER.includes(ch)) {
+      const idx = UPPER.indexOf(ch);
+      // Encrypt: shift backward. Decrypt: shift forward
+      const newIdx = mod(idx + (decrypt ? shiftFactor : -shiftFactor), UPPER.length);
+      out += UPPER[newIdx];
+    } else {
+      out += ch;
+    }
   }
   return out;
 }
